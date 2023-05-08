@@ -7,7 +7,18 @@ def home(request):
     return render(request, 'main_app/home.html', {'todos' : todos })
 
 def edit(request, id):
-    todo = ToDo.objects.get(id=id)
+    if request.method == 'GET':
+        todo = ToDo.objects.get(id=id)
+        return render(request, 'main_app/add.html', {'todo' : todo})
+    
+    else:
+        todo = ToDo.objects.get(id=id)
+        todo.title = request.POST['title']
+        todo.description = request.POST.get('description')
+        todo.is_completed = True if request.POST.get('is_completed') else False
+        todo.save()
+
+        return redirect('main-home')
     
 
 def delete(request, id):
