@@ -1,0 +1,21 @@
+{% extends 'core/base.html' %}
+{% block title %} ToDo | Add {% endblock title %}
+
+{% block content %} 
+    <form method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="title">Title</label>
+            <input type="text" class="form-control" id="title" name="title">
+        </div>
+        <div class="form-group">
+            <label for="description">Description</label>
+            <input type="text" class="form-control" id="description" name="description">
+        </div>
+        <div class="form-group form-check">
+            <input type="checkbox" class="form-check-input" id="is_completed" name="is_completed">
+            <label class="form-check-label" for="is_completed">Is_Completed</label>
+        </div>
+        <button type="submit" class="btn btn-success">Add</button>
+  </form>
+{% endblock content %}

@@ -1,0 +1,29 @@
+{% extends 'core/base.html' %}
+{% block title %} Home Page ToDo{% endblock title %}
+
+{% block content %} 
+<h1>ToDo</h1>
+
+    {% for item in todos %}
+        <div class="card" style="width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title">{{item.title}}</h5>
+                <p class="card-text">{{item.description}}</p>
+                <p class="card-text">Created-by: {{item.user.username}}</p>
+                <a href="{% url 'main-edit' id=item.id%}" class="btn btn-primary">Edit</a>
+                <a href="{% url 'main-delete' id=item.id%}" class="btn btn-danger">Delete</a>
+            </div>
+        </div>
+    {% endfor %}
+    <div class="pl-5 mt-1">
+        <a href="{% url 'main-add' %}" class="btn btn-warning">Add</a>
+    </div>   
+    
+    <!-- <div>
+        {{item.created_date}}
+        {{item.updated_date}}
+        {{item.is_completed}}  
+    </div> -->
+    
+
+{% endblock content %}
