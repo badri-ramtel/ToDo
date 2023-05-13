@@ -1,0 +1,1 @@
+alert('New user is added')
