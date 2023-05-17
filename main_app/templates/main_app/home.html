@@ -1,29 +1,97 @@
 {% extends 'core/base.html' %}
-{% block title %} Home Page ToDo{% endblock title %}
+{% load static %}
+{% block title %} Home | ToDo {% endblock title %}
 
-{% block content %} 
-<h1>ToDo</h1>
+{% block content %}
+<div class="pt-4 pb-2">
+    <form class="form-inline my-2 my-lg-0 mt-4"  method="GET">
+        <input class="form-control mr-sm-2" type="search" placeholder="Search" name="query" value="{{request.session.query}}">
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+    </form>
+</div> 
 
-    {% for item in todos %}
-        <div class="card" style="width: 18rem;">
-            <div class="card-body">
-                <h5 class="card-title">{{item.title}}</h5>
-                <p class="card-text">{{item.description}}</p>
-                <p class="card-text">Created-by: {{item.user.username}}</p>
-                <a href="{% url 'main-edit' id=item.id%}" class="btn btn-primary">Edit</a>
-                <a href="{% url 'main-delete' id=item.id%}" class="btn btn-danger">Delete</a>
-            </div>
-        </div>
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+        <li {% if message.tags %} class="{{message.tags}}" {% endif %}> {{ message }} </li>
     {% endfor %}
-    <div class="pl-5 mt-1">
+</ul>
+{% endif %}
+
+{% for item in page_obj %}
+    <div class="card" style="width: 18rem;">
+        <div class="card-body">
+            <h5 class="card-title">{{item.title}}</h5>
+            <p class="card-text">{{item.description}}</p>
+            <p class="card-text">Created-by: {{item.user.username}}</p>
+            {% if user.is_superuser or user.id == item.user.id %}
+                <a href="{% url 'main-edit' id=item.id %}" class="btn btn-primary">Edit</a>
+                <a href="{% url 'main-delete' id=item.id %}" class="btn btn-danger">Delete</a>
+                {% if item.is_completed %}
+                   <a href="{% url 'main-complete' id=item.id %}" class="btn btn-primary">incomplete</a>
+                {% else %}
+                    <a href="{% url 'main-complete' id=item.id %}" class="btn btn-primary">complete</a>
+                {% endif %}
+            {% endif %}
+        </div>
+    </div>
+{% endfor %}
+<br>
+     
+<!-- {% for item in page_obj %}
+    <div class="card" style="width: 18rem;">
+        <div class="card-body">
+            <h5 class="card-title">{{item.title}}</h5>
+            <p class="card-text">{{item.description}}</p>
+            <p class="card-text">Created-by: {{item.user.username}}</p>
+            {% if user.is_superuser or user.id == item.user.id %}
+                <a href="{% url 'main-edit' id=item.id %}" class="btn btn-primary">Edit</a>
+                <a href="{% url 'main-delete' id=item.id %}" class="btn btn-danger">Delete</a>
+                {% if item.is_completed %}
+                    <a href="{% url 'main-complete' id=item.id %}" class="btn btn-primary">incomplete</a>
+                {% else %}
+                    <a href="{% url 'main-complete' id=item.id %}" class="btn btn-primary">complete</a>
+                {% endif %}
+            {% endif %}
+        </div>
+    </div>
+{% endfor %} -->
+<br>
+<div class="text-center">
+    {{page_obj}}<br>
+    Has_Previous: {{page_obj.has_previous}} <br>
+    Has_Next: {{page_obj.has_next}} <br>
+    current_page: {{page_obj.number}} <br>
+    number_of_page: {{page_obj.paginator.num_pages}} <br>
+    <hr><br><br>
+
+    {% if page_obj.has_previous %}
+        <a href="?page=1"> &laquo First </a>
+        <a href="?page={{page_obj.previous_page_number}}">Prev</a>
+    {% endif %}
+
+    page {{page_obj.number}} of {{page_obj.paginator.num_pages}}
+
+    {% if page_obj.has_next %}
+        <a href="?page={{page_obj.next_page_number}}">Next</a>
+        <a href="?page={{page_obj.paginator.num_pages}}">Last &raquo </a>
+    {% endif %}
+
+    </div>
+<br>
+{% if request.user.is_authenticated %}
+    <div style="text-align: center;">
         <a href="{% url 'main-add' %}" class="btn btn-warning">Add</a>
-    </div>   
-    
+    </div>
+{% endif %}
+
     <!-- <div>
         {{item.created_date}}
         {{item.updated_date}}
         {{item.is_completed}}  
     </div> -->
+
+    <!-- <img src="{% static 'image/todo.jpg'%}" alt=""> -->
     
 
 {% endblock content %}

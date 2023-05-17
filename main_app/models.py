@@ -43,7 +43,7 @@ class ToDo(models.Model):
     class Meta:
         db_table = 'todo'
         verbose_name_plural = 'todo'
-        ordering = ['-updated_date']
+        ordering = ['updated_date']
 
 
 
