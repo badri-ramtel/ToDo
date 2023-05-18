@@ -19,7 +19,7 @@ def register(request):
     #    print(request.POST['firstname'])
     #    print(make_password(pswd))
 
-       User.objects.create_user( email=email, username=username, password=pswd)
+       User.objects.create_user(first_name=fn, last_name=ln, email=email, username=username, password=pswd)
 
        return redirect('authapp-login')
 
@@ -34,8 +34,12 @@ def login_user(request):
         user = authenticate(request, username=username, password=pswd)
         if user is not None:
             login(request, user)
+            # print('##########')
+            # print(request.GET.get('next'))
+            next_url = request.GET.get('next')
+            if next_url is not None:
+                return redirect(next_url)
             return redirect('main-home')
-        
         else:
             return redirect('authapp-login')
         

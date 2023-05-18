@@ -3,3 +3,10 @@
     margin-bottom: 10px;
     float: none;
 }
+
+.form-inline{
+    margin: 0 auto;
+    margin-bottom: 10px;
+    float: none;
+    flex: none;
+}
